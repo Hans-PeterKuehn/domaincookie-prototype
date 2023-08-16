@@ -32,9 +32,16 @@ function cookieResponse(domain) {
 }
 //https://ab48-89-1-211-91.ngrok-free.app
 
+app.options("*", () => {
+  res.header("Access-Control-Allow-Origin", "https://5409-80-187-122-184.ngrok-free.app");
+  res.header("Access-Control-Allow-Credentials", "true")
+  res.header("Access-Control-Allow-Methods","POST, GET, OPTIONS")
+  res.sendStatus(204);
+})
+
 app.use('/', indexRouter);
-app.use('/local', cookieResponse("5409-80-187-122-184.ngrok-free.app"));
-app.use('/ngrok', cookieResponse("1249-89-1-210-134.ngrok-free.app"));
+app.use('/ngrok', cookieResponse("https://5409-80-187-122-184.ngrok-free.app"));
+app.use('/local', cookieResponse("https://5409-80-187-122-184.ngrok-free.app"));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
