@@ -33,8 +33,8 @@ function cookieResponse(domain) {
 //https://ab48-89-1-211-91.ngrok-free.app
 
 app.use('/', indexRouter);
-app.use('/local', cookieResponse("localhost"));
-app.use('/ngrok', cookieResponse("ab48-89-1-211-91.ngrok-free.app"));
+app.use('/local', cookieResponse("5409-80-187-122-184.ngrok-free.app"));
+app.use('/ngrok', cookieResponse("1249-89-1-210-134.ngrok-free.app"));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
