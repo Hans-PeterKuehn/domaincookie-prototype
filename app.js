@@ -59,6 +59,9 @@ app.use('/local', (req, res, next) => {
     res.header("Set-Cookie", `foo=same-origin-cookie; HttpOnly; Secure; SameSite=None`);
     res.sendStatus(200);
 });
+app.get("/iframe", (req, res, next) => {
+    res.render('iframe', { title: req.hostname });
+});
 app.use('/', indexRouter);
 
 
