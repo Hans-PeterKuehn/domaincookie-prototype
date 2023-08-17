@@ -18,46 +18,57 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-function cookieResponse(domain) {
-  return (req, res, next) => {
-    try {
-      res.header("Set-Cookie", `foo=cross-origin-cookie; Expires=Mon, 17 Aug 2023 15:15:20 GMT; HttpOnly; Secure; SameSite=None`);
-      res.header("Access-Control-Allow-Origin", domain);
-      res.header("Access-Control-Allow-Credentials", "true")
-      res.json({ ok: 200 });
-    }catch (e) {
-      next(e);
-    }
-  };
+function cookieResponse() {
+    return (req, res, next) => {
+        try {
+            if (req.baseUrl.includes(otherSubdomain)) {
+                res.header("Set-Cookie", `foo=cross-origin-cookie; HttpOnly; Secure; SameSite=None`);
+                res.header("Access-Control-Allow-Origin", completeOtherDomain);
+                res.header("Access-Control-Allow-Credentials", "true")
+                res.json({ ok: 200 });
+            }
+        } catch (e) {
+            next(e);
+        }
+    };
 }
-//https://ab48-89-1-211-91.ngrok-free.app
 
-app.options("*", () => {
-  res.header("Access-Control-Allow-Origin", "https://5409-80-187-122-184.ngrok-free.app");
-  res.header("Access-Control-Allow-Credentials", "true")
-  res.header("Access-Control-Allow-Methods","POST, GET, OPTIONS")
-  res.sendStatus(204);
+const otherSubdomain = "5409-80-187-122-184";
+const completeOtherDomain = `https://${otherSubdomain}.ngrok-free.app`;
+app.options("*", (req, res, next) => {
+    if (req.baseUrl.includes(otherSubdomain)) {
+        res.header("Access-Control-Allow-Origin", completeOtherDomain);
+        res.header("Access-Control-Allow-Credentials", "true")
+        res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+        res.header("Access-Control-Max-Age", 5)
+        res.sendStatus(204);
+    } else {
+        next();
+    }
 })
 
+app.use('/other', cookieResponse());
+app.use('/local', (req, res, next) => {
+    res.sendStatus(200);
+});
 app.use('/', indexRouter);
-app.use('/ngrok', cookieResponse("https://5409-80-187-122-184.ngrok-free.app"));
-app.use('/local', cookieResponse("https://5409-80-187-122-184.ngrok-free.app"));
+
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+    next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  console.log(err);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    console.log(err);
+    res.render('error');
 });
 
 module.exports = app;
