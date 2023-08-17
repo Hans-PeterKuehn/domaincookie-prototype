@@ -51,6 +51,7 @@ app.options("*", (req, res, next) => {
 
 app.use('/other', cookieResponse());
 app.use('/local', (req, res, next) => {
+    res.header("Set-Cookie", `foo=same-origin-cookie; HttpOnly; Secure; SameSite=None`);
     res.sendStatus(200);
 });
 app.use('/', indexRouter);

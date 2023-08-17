@@ -19,7 +19,7 @@
 
             $("#other").click(() => {
                 console.log("clicked");
-                window.fetch(`${otherDomain}/other`).then(
+                window.fetch(`${otherDomain}/other`, {credentials: 'include'}).then(
                                     (response) => {
                                         console.log(response);
                                     }
