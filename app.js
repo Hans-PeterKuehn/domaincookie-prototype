@@ -23,7 +23,7 @@ function cookieResponse() {
         try {
             const referer = req.header("referer");
             if (referer.includes(otherSubdomain)) {
-                res.header("Set-Cookie", `foo=cross-origin-cookie; Domain=.ngrok-free.app; HttpOnly; Secure; SameSite=None`);
+                res.header("Set-Cookie", `foo=cross-origin-cookie; HttpOnly; Secure; SameSite=None`);
                 res.header("Access-Control-Allow-Origin", completeOtherDomain);
                 res.header("Access-Control-Allow-Credentials", "true")
                 res.json({ ok: 200 });
@@ -51,7 +51,7 @@ app.options("*", (req, res, next) => {
 
 app.use('/other', cookieResponse());
 app.use('/local', (req, res, next) => {
-    res.header("Set-Cookie", `foo=same-origin-cookie; Domain=.ngrok-free.app; HttpOnly; Secure; SameSite=None`);
+    res.header("Set-Cookie", `foo=same-origin-cookie; HttpOnly; Secure; SameSite=None`);
     res.sendStatus(200);
 });
 app.use('/', indexRouter);
