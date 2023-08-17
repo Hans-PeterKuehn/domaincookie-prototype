@@ -36,6 +36,10 @@ function cookieResponse() {
 
 const otherSubdomain = "4bc2-80-187-122-184";
 const completeOtherDomain = `https://${otherSubdomain}.ngrok-free.app`;
+app.use((req, res, next) => {
+    res.locals.otherDomain = completeOtherDomain;
+})
+
 app.options("*", (req, res, next) => {
     const referer = req.header("referer");
     if (referer.includes(otherSubdomain)) {
