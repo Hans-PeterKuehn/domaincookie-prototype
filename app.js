@@ -33,7 +33,7 @@ function cookieResponse() {
     };
 }
 
-const otherSubdomain = "5409-80-187-122-184";
+const otherSubdomain = "4bc2-80-187-122-184";
 const completeOtherDomain = `https://${otherSubdomain}.ngrok-free.app`;
 app.options("*", (req, res, next) => {
     if (req.baseUrl.includes(otherSubdomain)) {
