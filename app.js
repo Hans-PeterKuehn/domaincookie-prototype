@@ -21,7 +21,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 function cookieResponse() {
     return (req, res, next) => {
         try {
-            if (req.baseUrl.includes(otherSubdomain)) {
+            const referer = req.header("referer");
+            if (referer.includes(otherSubdomain)) {
                 res.header("Set-Cookie", `foo=cross-origin-cookie; HttpOnly; Secure; SameSite=None`);
                 res.header("Access-Control-Allow-Origin", completeOtherDomain);
                 res.header("Access-Control-Allow-Credentials", "true")
@@ -36,7 +37,8 @@ function cookieResponse() {
 const otherSubdomain = "4bc2-80-187-122-184";
 const completeOtherDomain = `https://${otherSubdomain}.ngrok-free.app`;
 app.options("*", (req, res, next) => {
-    if (req.baseUrl.includes(otherSubdomain)) {
+    const referer = req.header("referer");
+    if (referer.includes(otherSubdomain)) {
         res.header("Access-Control-Allow-Origin", completeOtherDomain);
         res.header("Access-Control-Allow-Credentials", "true")
         res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
