@@ -2,3 +2,25 @@
 <p>Welcome to {{title}}</p>
 <button id="local">local</button>
 <button id="other">other</button>
+<script>
+    const otherDomain = {{otherDomain}}
+        $().ready(() => {
+            $("#local").click(() => {
+                console.log("clicked");
+                window.fetch(`/local`).then(
+                    (response) => {
+                        console.log(response);
+                    }
+                );
+            });
+
+            $("#other").click(() => {
+                console.log("clicked");
+                window.fetch(`${otherDomain}/other`, {credentials: 'include'}).then(
+                                    (response) => {
+                                        console.log(response);
+                                    }
+                                );
+            });
+        })
+</script>
